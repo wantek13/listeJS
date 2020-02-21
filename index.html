@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>liste de course exo</title>
+    <script src="script.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Galada&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div id="blankUp" class="row"></div>
+    <div class="row">
+<!---------------------first card---------------------------------->
+        <div class="card" style="width: 18rem;">
+            <img class="bd-placeholder-img card-img-top" width="100%" height="180" src="img/bg1.jpg"></img>
+            
+            <div class="card-body">
+                <h5 class="card-title">Fruits disponibles</h5>
+
+                <div id="base">
+                    <ul id="baseList">
+                        
+                    </ul>
+                </div>
+
+                <a href="#" class="btn btn-outline-primary" onclick="ajouter()">Ajouter</a>
+            </div>
+        </div>
+<!---------------------end first card---------------------------------->
+<!---------------------second card---------------------------------->
+        <div class="card" style="width: 18rem;">
+            <img class="bd-placeholder-img card-img-top" width="100%" height="180" src="img/bg2.jpg"></img>
+            
+            <div class="card-body">
+                <h5 class="card-title">Liste de fruits</h5>
+
+                <div id="liste">
+                    <ul id="ulList">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+<!---------------------end second card---------------------------------->
+<!---------------------third card---------------------------------->
+        <div class="card" style="width: 18rem;">
+            <img class="bd-placeholder-img card-img-top" width="100%" height="180" src="img/bg3.jpg"></img>
+            
+            <div class="card-body">
+                <h5 class="card-title">Actions</h5>
+
+                <div id="action">
+                    <ul>
+                        <a href="#" id="up" class="btn btn-success">vers le haut</a>
+                        <a href="#" id="down" class="btn btn-success">vers le bas</a>
+                        <a href="#" id="first" class="btn btn-warning">en premier</a>
+                        <a href="#" id="last" class="btn btn-warning">en dernier</a>
+                        <a href="#" id="suppr" class="btn btn-danger">Supprimer</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+<!---------------------end third card card---------------------------------->
+
+<script>
+    index = 0;
+
+    function ajouter()
+    {
+        // crée un nouvel élément div
+        var newDiv = document.createElement("li");
+        //on definit un index a l'id
+        index++;
+        var idIndex = 'element' + index;
+
+        newDiv.setAttribute("id", idIndex);
+        newDiv.setAttribute("onclick", "moveInList(this.id)");
+
+        //entrer la nouveau produit
+        var element = prompt('Entrez un produit!');
+        // et lui donne un peu de contenu
+        var newContent = document.createTextNode(element);
+        // ajoute le nœud texte au nouveau div créé
+        newDiv.appendChild(newContent);
+        
+        // ajoute le nouvel élément créé et son contenu dans le DOM
+        var currentDiv = document.getElementById('baseList');
+        currentDiv.appendChild(newDiv);
+
+        return newDiv;
+    }
+
+    function moveInList(clicked)
+    {
+        //selectionner element dans la liste de base
+        var elementBase = document.getElementById(clicked);
+        //on definit l'endroit ou l'élement doit se déplacer
+        var ulList = document.getElementById('ulList');
+        //on envoie l'element dans la liste
+        ulList.appendChild(elementBase);
+        elementBase.setAttribute("onclick", "keepSelected(this)");
+        
+    }
+
+    function keepSelected(clicked)
+    {
+        var selectElement = clicked;
+        var selectedElements = document.querySelectorAll( 'li' );
+        console.log(selectedElements);
+        console.log(selectElement.className);
+        selectedElements.forEach(function(selectElement)
+        {
+            if(selectElement.className === 'selected')
+            {
+                selectElement.removeAttribute("class", "selected");
+                console.log(selectElement);
+            }
+        })
+        selectElement.setAttribute("class", "selected");
+        
+        var list = document.getElementById('ulList');
+
+        var suppr = document.getElementById('suppr');
+        suppr.onclick = function(){
+            list.removeChild(selectElement);
+        }
+
+        var up = document.getElementById('up');
+        up.onclick= function(){
+            var elementBefore = selectElement.previousSibling;
+            if(selectElement.previousSibling !== null)
+            {
+                console.log(elementBefore);
+                list.insertBefore(selectElement, elementBefore);
+            }
+        }
+
+        var down = document.getElementById('down');
+        down.onclick= function(){
+            var elementAfter = selectElement.nextSibling;
+            if(selectElement.nextSibling !== null)
+            {
+                list.insertBefore(selectElement, elementAfter.nextSibling);
+            }
+        }
+
+        var first = document.getElementById('first');
+        first.onclick= function(){
+            var elementFirst = list.firstChild;
+            console.log(elementFirst);
+                
+            list.insertBefore(selectElement, elementFirst);
+        }
+
+        var last = document.getElementById('last');
+        last.onclick= function(){
+            var elementLast = list.lastChild;
+            console.log(elementLast);
+                
+            list.insertBefore(selectElement, elementLast.nextSibling);
+        }
+    }
+
+</script>
+</body>
+</html>
